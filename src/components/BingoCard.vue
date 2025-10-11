@@ -10,8 +10,8 @@
         <div
           v-for="(cell, index) in cells"
           :key="index"
-          :class="['bingo-cell', { marked: cell.isMarked, free: cell.isFree }]"
           @click="toggleCell(index)"
+          :class="['bingo-cell', { 'free-space': cell.isFree }, { marked: cell.isMarked }]"
         >
           {{ cell.text }}
         </div>
@@ -24,36 +24,38 @@
 </template>
 
 <script>
+import { supabase } from '@/supabase' // adjust path as needed
+
 export default {
   name: 'BingoCard',
   data() {
     return {
       cells: [
-        { text: 'Sample Text 1', isFree: false, isMarked: false },
-        { text: 'Sample Text 2', isFree: false, isMarked: false },
-        { text: 'Sample Text 3', isFree: false, isMarked: false },
-        { text: 'Sample Text 4', isFree: false, isMarked: false },
-        { text: 'Sample Text 5', isFree: false, isMarked: false },
-        { text: 'Sample Text 6', isFree: false, isMarked: false },
-        { text: 'Sample Text 7', isFree: false, isMarked: false },
-        { text: 'Sample Text 8', isFree: false, isMarked: false },
-        { text: 'Sample Text 9', isFree: false, isMarked: false },
-        { text: 'Sample Text 10', isFree: false, isMarked: false },
-        { text: 'Sample Text 11', isFree: false, isMarked: false },
-        { text: 'Sample Text 12', isFree: false, isMarked: false },
-        { text: 'FREE: People Fight', isFree: true, isMarked: false },
-        { text: 'Sample Text 13', isFree: false, isMarked: false },
-        { text: 'Sample Text 14', isFree: false, isMarked: false },
-        { text: 'Sample Text 15', isFree: false, isMarked: false },
-        { text: 'Sample Text 16', isFree: false, isMarked: false },
-        { text: 'Sample Text 17', isFree: false, isMarked: false },
-        { text: 'Sample Text 18', isFree: false, isMarked: false },
-        { text: 'Sample Text 19', isFree: false, isMarked: false },
-        { text: 'Sample Text 20', isFree: false, isMarked: false },
-        { text: 'Sample Text 21', isFree: false, isMarked: false },
-        { text: 'Sample Text 22', isFree: false, isMarked: false },
-        { text: 'Sample Text 23', isFree: false, isMarked: false },
-        { text: 'Sample Text 24', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '"You', isFree: false, isMarked: false },
+        { text: 'miss', isFree: false, isMarked: false },
+        { text: '100%', isFree: false, isMarked: false },
+        { text: 'of', isFree: false, isMarked: false },
+        { text: 'the', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: true, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: 'shots', isFree: false, isMarked: false },
+        { text: 'that', isFree: false, isMarked: false },
+        { text: 'you', isFree: false, isMarked: false },
+        { text: 'never', isFree: false, isMarked: false },
+        { text: 'take."', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '', isFree: false, isMarked: false },
+        { text: '- Wayne', isFree: false, isMarked: false },
+        { text: 'Gretsky', isFree: false, isMarked: false },
       ],
     }
   },
@@ -65,19 +67,57 @@ export default {
     },
     async generateCard() {
       try {
-        // TODO: replace with API endpoint
-        const response = await fetch('YOUR_API_ENDPOINT_HERE')
-        const data = await response.json()
+        const selectedPhrases = []
 
-        // TODO: array of strings picked at random with data distribution
-        // update cells with the new data (keep FREE in the middle)
-        this.cells = data.map((text, index) => ({
-          text: index === 12 ? 'FREE' : text,
-          isFree: index === 12,
-          isMarked: false,
-        }))
+        // data distribution: index 0 and 3 get 1 each, index 1 and 2 get 2 each
+        const distribution = {
+          0: 1,
+          1: 2,
+          2: 2,
+          3: 1,
+        }
+
+        // For each rarity index
+        for (const [rarityIndex, countPerType] of Object.entries(distribution)) {
+          // For each type (0, 1, 2, 3)
+          for (let type = 0; type < 4; type++) {
+            const { data, error } = await supabase
+              .from('bingo_phrases')
+              .select('*')
+              .eq('rarity_index', rarityIndex)
+              .eq('type', type)
+              .eq('is_used', false)
+              .limit(countPerType)
+
+            if (error) throw error
+
+            // randomly select text
+            const shuffled = data.sort(() => Math.random() - 0.5)
+            selectedPhrases.push(...shuffled.slice(0, countPerType))
+          }
+        }
+
+        // update used boolean
+        const phraseIds = selectedPhrases.map((p) => p.id)
+        await supabase.from('bingo_phrases').update({ is_used: true }).in('id', phraseIds)
+
+        // shuffle the 24 texts
+        const shuffledTexts = selectedPhrases.sort(() => Math.random() - 0.5)
+
+        // populate cells with new data, leaving index 12 free
+        this.cells = shuffledTexts
+          .slice(0, 12)
+          .concat(
+            [{ text: 'FREE: People Fight', isFree: true, isMarked: false }],
+            shuffledTexts.slice(12, 24),
+          )
+          .map((item) => ({
+            text: item.isFree ? item.text : item.text,
+            isFree: item.isFree || false,
+            isMarked: false,
+          }))
       } catch (error) {
-        console.error('Error fetching bingo data:', error)
+        console.error('Error generating bingo card:', error)
       }
     },
   },
