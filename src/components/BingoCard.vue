@@ -62,6 +62,23 @@ export default {
         this.cells[index].isMarked = !this.cells[index].isMarked
       }
     },
+    async generateCard() {
+      try {
+        // TODO: replace with API endpoint
+        const response = await fetch('YOUR_API_ENDPOINT_HERE')
+        const data = await response.json()
+
+        // TODO: array of strings picked at random with data distribution
+        // update cells with the new data (keep FREE in the middle)
+        this.cells = data.map((text, index) => ({
+          text: index === 12 ? 'FREE' : text,
+          isFree: index === 12,
+          isMarked: false,
+        }))
+      } catch (error) {
+        console.error('Error fetching bingo data:', error)
+      }
+    },
   },
 }
 </script>
@@ -159,6 +176,31 @@ export default {
   text-align: center;
   color: #9ca3af;
   font-size: 0.85rem;
+}
+
+.generate-btn {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+}
+
+.generate-btn:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 640px) {
