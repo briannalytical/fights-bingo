@@ -1,6 +1,4 @@
 <template>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <div id="app">
     <BingoCard />
   </div>
@@ -33,5 +31,6 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 </style>

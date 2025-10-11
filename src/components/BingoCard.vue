@@ -16,8 +16,9 @@
           {{ cell.text }}
         </div>
       </div>
-
-      <div class="bingo-footer">What the hell am i doin</div>
+      <div class="bingo-footer">
+        <button class="generate-btn" @click="generateCard">Fight!</button>
+      </div>
     </div>
   </div>
 </template>
@@ -174,8 +175,9 @@ export default {
 
 .bingo-footer {
   text-align: center;
-  color: #9ca3af;
-  font-size: 0.85rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .generate-btn {
