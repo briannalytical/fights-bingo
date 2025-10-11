@@ -2,8 +2,8 @@
   <div class="page-container">
     <div class="bingo-card">
       <div class="bingo-header">
-        <h1 class="bingo-title">BINGO</h1>
-        <p class="bingo-subtitle">Click to mark squares</p>
+        <h1 class="bingo-title">Fights Bingo</h1>
+        <p class="bingo-subtitle">They Gettin They Ass Beat on Twitter</p>
       </div>
 
       <div class="bingo-grid">
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="bingo-footer">Click any square to toggle selection</div>
+      <div class="bingo-footer">What the hell am i doin</div>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
         { text: 'Sample Text 10', isFree: false, isMarked: false },
         { text: 'Sample Text 11', isFree: false, isMarked: false },
         { text: 'Sample Text 12', isFree: false, isMarked: false },
-        { text: 'FREE', isFree: true, isMarked: false },
+        { text: 'FREE: People Fight', isFree: true, isMarked: false },
         { text: 'Sample Text 13', isFree: false, isMarked: false },
         { text: 'Sample Text 14', isFree: false, isMarked: false },
         { text: 'Sample Text 15', isFree: false, isMarked: false },
