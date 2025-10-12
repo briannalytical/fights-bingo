@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { supabase } from '@/supabase' // adjust path as needed
+import { supabase } from '@/supabase'
 
 export default {
   name: 'BingoCard',
@@ -78,16 +78,19 @@ export default {
           3: 1,
         }
 
+        // define string types from db
+        const types = ['Fight Tactic', 'People', 'Scenario', 'Setting']
+
         // for rarity index
         for (const [rarityIndex, countPerType] of Object.entries(distribution)) {
-          // for each type (0-3)
-          for (let type = 0; type < 4; type++) {
+          // for each type
+          for (const type of types) {
             console.log(
               `Fetching: rarity_index=${rarityIndex}, type=${type}, count=${countPerType}`,
             )
 
             const { data, error } = await supabase
-              .from('bingo_phrases')
+              .from('fights')
               .select('*')
               .eq('rarity_index', rarityIndex)
               .eq('type', type)
@@ -123,7 +126,7 @@ export default {
         const phraseIds = selectedPhrases.map((p) => p.id)
         if (phraseIds.length > 0) {
           const { error } = await supabase
-            .from('bingo_phrases')
+            .from('fights')
             .update({ is_used: true })
             .in('id', phraseIds)
 
@@ -172,10 +175,7 @@ export default {
     },
     async resetAllPhrases() {
       try {
-        const { error } = await supabase
-          .from('bingo_phrases')
-          .update({ is_used: false })
-          .neq('id', 0) // update all rows
+        const { error } = await supabase.from('fights').update({ is_used: false }).neq('id', 0) // update all rows
 
         if (error) throw error
 
