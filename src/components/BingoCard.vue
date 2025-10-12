@@ -70,32 +70,28 @@ export default {
         console.log('Starting card generation...')
         const selectedPhrases = []
 
-        // data distribution: index 0 and 3 get 1 each, index 1 and 2 get 2 each
+        // distribution by type
         const distribution = {
-          0: 1,
-          1: 2,
-          2: 2,
-          3: 1,
+          Scenario: [2, 4, 4, 2],
+          'Fight Tactic': [1, 1, 1, 1],
+          Setting: [1, 1, 1, 1],
+          People: [1, 1, 1, 1],
         }
 
-        // define string types from db
-        const types = ['Fight Tactic', 'People', 'Scenario', 'Setting']
+        // for each type x rarity index
+        for (const [type, counts] of Object.entries(distribution)) {
+          for (let rarityIndex = 0; rarityIndex < counts.length; rarityIndex++) {
+            const count = counts[rarityIndex]
 
-        // for rarity index
-        for (const [rarityIndex, countPerType] of Object.entries(distribution)) {
-          // for each type
-          for (const type of types) {
-            console.log(
-              `Fetching: rarity_index=${rarityIndex}, type=${type}, count=${countPerType}`,
-            )
+            if (count === 0) continue
+
+            console.log(`Fetching: type=${type}, rarity_index=${rarityIndex}, count=${count}`)
 
             const { data, error } = await supabase
               .from('fights')
               .select('*')
-              .eq('rarity_index', rarityIndex)
               .eq('type', type)
-              .eq('is_used', false)
-              .limit(countPerType)
+              .eq('rarity_index', rarityIndex)
 
             if (error) {
               console.error('Supabase error:', error)
@@ -103,46 +99,27 @@ export default {
             }
 
             console.log(
-              `Found ${data.length} phrases for rarity_index=${rarityIndex}, type=${type}`,
+              `Found ${data.length} phrases for type=${type}, rarity_index=${rarityIndex}`,
             )
 
             // randomly select from available phrases
             const shuffled = data.sort(() => Math.random() - 0.5)
-            selectedPhrases.push(...shuffled.slice(0, countPerType))
+            selectedPhrases.push(...shuffled.slice(0, count))
           }
         }
 
         console.log(`Total phrases selected: ${selectedPhrases.length}`)
 
-        // verify if 24 phrases
+        // verify if we have 24 phrases
         if (selectedPhrases.length < 24) {
-          alert(
-            `Not enough unused phrases available. Only found ${selectedPhrases.length}/24. Consider resetting phrases.`,
-          )
+          alert(`Not enough phrases available. Only found ${selectedPhrases.length}/24.`)
           return
         }
 
-        // Mark selected phrases as used
-        const phraseIds = selectedPhrases.map((p) => p.id)
-        if (phraseIds.length > 0) {
-          const { error } = await supabase
-            .from('fights')
-            .update({ is_used: true })
-            .in('id', phraseIds)
-
-          if (error) {
-            console.error('Error marking phrases as used:', error)
-            throw error
-          }
-
-          console.log('Marked phrases as used')
-        }
-
-        // shuffle 24 phrases
+        // shuffle all selected phrases
         const shuffledPhrases = selectedPhrases.sort(() => Math.random() - 0.5)
 
         // populate cells with new data, leaving index 12 free
-        // populate first 12 phrases
         const newCells = shuffledPhrases.slice(0, 12).map((phrase) => ({
           text: phrase.text,
           isFree: false,
@@ -171,19 +148,6 @@ export default {
       } catch (error) {
         console.error('Error generating bingo card:', error)
         alert('Failed to generate card. Check console for details.')
-      }
-    },
-    async resetAllPhrases() {
-      try {
-        const { error } = await supabase.from('fights').update({ is_used: false }).neq('id', 0) // update all rows
-
-        if (error) throw error
-
-        console.log('All phrases reset successfully')
-        alert('All phrases have been reset!')
-      } catch (error) {
-        console.error('Error resetting phrases:', error)
-        alert('Failed to reset phrases. Check console for details.')
       }
     },
   },
