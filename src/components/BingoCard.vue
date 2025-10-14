@@ -166,6 +166,7 @@ export default {
   padding: 32px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   border: 1px solid #333;
+  width: 100%;
 }
 
 .bingo-header {
@@ -196,6 +197,7 @@ export default {
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
   margin-bottom: 24px;
+  position: static;
 }
 
 .bingo-cell {
@@ -247,7 +249,7 @@ export default {
 }
 
 .generate-btn {
-  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  background: linear-gradient(135deg, #fbbf24 0%, #dc2626 100%);
   color: white;
   border: none;
   border-radius: 8px;
