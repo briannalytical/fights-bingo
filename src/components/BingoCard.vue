@@ -250,7 +250,7 @@ export default {
 
 .generate-btn {
   background: linear-gradient(135deg, #fbbf24 0%, #dc2626 100%);
-  color: white;
+  color: black;
   border: none;
   border-radius: 8px;
   padding: 12px 32px;
@@ -265,6 +265,7 @@ export default {
 
 .generate-btn:hover {
   transform: translateY(-2px);
+  color: white;
   box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
   background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
 }
