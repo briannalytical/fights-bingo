@@ -282,11 +282,13 @@ export default {
   .page-container {
     padding: 0 6px;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .bingo-card {
     padding: 10px;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .bingo-title {
@@ -300,13 +302,19 @@ export default {
   .bingo-grid {
     gap: 2px;
     box-sizing: border-box;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .bingo-cell {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     font-size: 0.45rem;
     padding: 2px;
     border-width: 1px;
     box-sizing: border-box;
+    overflow: hidden;
+    word-break: break-word;
   }
 
   .bingo-cell.free-space {
@@ -319,4 +327,3 @@ export default {
     box-sizing: border-box;
   }
 }
-</style>
