@@ -275,40 +275,48 @@ export default {
 }
 
 @media (max-width: 640px) {
+  * {
+    box-sizing: border-box;
+  }
+
   .page-container {
-    padding: 0 12px;
+    padding: 0 6px;
+    box-sizing: border-box;
   }
 
   .bingo-card {
-    padding: 16px;
+    padding: 10px;
+    box-sizing: border-box;
   }
 
   .bingo-title {
-    font-size: 1.75rem;
-    letter-spacing: 0.05em;
+    font-size: 1.25rem;
   }
 
   .bingo-subtitle {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
   .bingo-grid {
-    gap: 4px;
+    gap: 2px;
+    box-sizing: border-box;
   }
 
   .bingo-cell {
-    font-size: 0.6rem;
-    padding: 4px;
-    border-radius: 6px;
+    font-size: 0.45rem;
+    padding: 2px;
+    border-width: 1px;
+    box-sizing: border-box;
   }
 
   .bingo-cell.free-space {
-    font-size: 0.75rem;
+    font-size: 0.6rem;
   }
 
   .generate-btn {
-    padding: 10px 24px;
-    font-size: 0.9rem;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    box-sizing: border-box;
   }
 }
 </style>
