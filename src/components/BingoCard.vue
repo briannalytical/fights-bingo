@@ -72,10 +72,10 @@ export default {
 
         // distribution by type
         const distribution = {
-          Scenario: [2, 4, 4, 2],
+          Scenario: [2, 5, 4, 2],
           'Fight Tactic': [1, 1, 1, 1],
           Setting: [1, 1, 1, 1],
-          People: [1, 1, 1, 1],
+          People: [1, 1, 1, 0],
         }
 
         // for each type x rarity index
@@ -275,32 +275,40 @@ export default {
 }
 
 @media (max-width: 640px) {
+  .page-container {
+    padding: 0 12px;
+  }
+
   .bingo-card {
-    padding: 20px;
+    padding: 16px;
   }
 
   .bingo-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .bingo-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .bingo-grid {
+    gap: 4px;
   }
 
   .bingo-cell {
-    font-size: 0.65rem;
-    padding: 6px;
-  }
-}
-
-@media (max-width: 640px) {
-  .bingo-card {
-    padding: 20px;
+    font-size: 0.6rem;
+    padding: 4px;
+    border-radius: 6px;
   }
 
-  .bingo-title {
-    font-size: 2rem;
+  .bingo-cell.free-space {
+    font-size: 0.75rem;
   }
 
-  .bingo-cell {
-    font-size: 0.65rem;
-    padding: 6px;
+  .generate-btn {
+    padding: 10px 24px;
+    font-size: 0.9rem;
   }
 }
 </style>
