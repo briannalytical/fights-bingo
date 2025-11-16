@@ -151,6 +151,45 @@ export default {
       }
     },
   },
+
+  // log when board pulls 24 cards
+  async logCardAppearances(cardIds) {
+    try {
+      await fetch('http://localhost:3000/api/appearance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cardIds }),
+      })
+    } catch (error) {
+      console.log('Analytics server not running:', error)
+    }
+  },
+
+  // log when a card is clicked/selected
+  async logCardSelection(cardId) {
+    try {
+      await fetch('http://localhost:3000/api/selection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cardId }),
+      })
+    } catch (error) {
+      console.log('Analytics server not running:', error)
+    }
+  },
+
+  // get analytics
+  async getAnalyticsStats() {
+    try {
+      const response = await fetch('http://localhost:3000/api/stats')
+      const stats = await response.json()
+      console.table(stats)
+      return stats
+    } catch (error) {
+      console.log('Could not fetch stats:', error)
+      return null
+    }
+  },
 }
 </script>
 
